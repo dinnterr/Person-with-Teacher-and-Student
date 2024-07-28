@@ -2,6 +2,9 @@
 #define TEACHER_H
 
 #include <iostream>
+#include <algorithm>
+#include <cctype>
+#include <string>
 #include "Person.h"
 
 class Teacher : public Person{

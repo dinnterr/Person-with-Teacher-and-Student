@@ -23,8 +23,15 @@ std::string Teacher::info() const {
     return ss.str();
 }
 
+// Функция для преобразования строки к нижнему регистру
+std::string toLower(const std::string& str) {
+    std::string lowerStr = str;
+    std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), [](unsigned char c){ return std::tolower(c); });
+    return lowerStr;
+}
+
 double Teacher::calculateSalary(double salary) const {
-    if (m_category == "First category teacher") {
+    if (toLower(m_category) == "first category teacher") {
         if (m_experience >= 20) {
             salary += salary * 0.2 + 3000;
         } else if (m_experience >= 10) {
@@ -32,7 +39,7 @@ double Teacher::calculateSalary(double salary) const {
         } else {
             salary += salary * 0.2;
         }
-    } else if (m_category == "Teacher of the highest category") {
+    } else if (toLower(m_category) == "teacher of the highest category") {
         if (m_experience >= 20) {
             salary += salary * 0.17 + 3000;
         } else if (m_experience >= 10) {

@@ -9,10 +9,10 @@
 #include "Headers/Teacher.h"
 #include "Headers/Scholarships.h"
 
-class People {
+class University {
 public:
-    People() = default;
-    ~People();
+    University() = default;
+    ~University();
 
     void addPerson (Person* person);
     void deletePerson (Person* person);
@@ -35,7 +35,6 @@ public:
     void printAllStudents () const;
     void printAllTeachers () const;
 
-    //int getStudentsNumber () const;
     Person* getSelectedStudent (int pos) const;
     Person* getSelectedTeacher (int pos) const;
 

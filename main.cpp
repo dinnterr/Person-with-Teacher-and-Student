@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <exception>
-#include "People.h"
+#include "University.h"
 #include "Headers/Person.h"
 #include "Headers/Teacher.h"
 #include "Headers/Student.h"
@@ -11,11 +11,12 @@
 using namespace std;
 
 int main() {
-    People people;
+    University people;
     Person * person = nullptr;
-    cout << "Welcome! You are using a person creation program." << endl << endl;
+    cout << "Hi! This is person creation program!" << endl << endl;
     for (;;) {
-        cout << "Now make your choice what do you want to do next (enter number):" << endl;
+        cout << "Select what you want to do next (enter number):" << endl;
+        cout << "0. Add default person." << endl;
         cout << "1. Add person." << endl;
         cout << "2. Add student." << endl;
         cout << "3. Add teacher." << endl;
@@ -30,7 +31,7 @@ int main() {
         cout << "12. Transfer a student to the next course." << endl;
         int n;
         cin >> n;
-        while (n < 1 || n > 12){
+        while (n < 0 || n > 12){
             cout << "You entered wrong number. Try again." << endl;
             cin >> n;
         }
@@ -51,49 +52,28 @@ int main() {
             cout << "No persons added. First add at least one." << endl << endl;
             continue;
         }
-        if (n == 8 && people.isNoPerson()){
-            cout << "No persons added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 8 && !people.isThereStudents()){
+        if ((n == 8 || n == 12) && !people.isThereStudents()){
             cout << "No students added. First add at least one." << endl << endl;
             continue;
         }
-        if (n == 9 && people.isNoPerson()){
-            cout << "No persons added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 9 && !people.isThereTeachers()){
+        if (n >= 9 && n < 12 && !people.isThereTeachers()) {
             cout << "No teachers added. First add at least one." << endl << endl;
             continue;
         }
-        if (n == 10 && people.isNoPerson()){
-            cout << "No persons added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 10 && !people.isThereTeachers()){
-            cout << "No teachers added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 11 && people.isNoPerson()){
-            cout << "No persons added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 11 && !people.isThereTeachers()){
-            cout << "No teachers added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 12 && people.isNoPerson()){
-            cout << "No persons added. First add at least one." << endl << endl;
-            continue;
-        }
-        if (n == 12 && !people.isThereStudents()){
-            cout << "No students added. First add at least one." << endl << endl;
-            continue;
+        if (n == 0) { //Add default person
+            try {
+                cout << "\"Added default person\"." << endl << endl;
+                person = new Person();
+                people.addPerson(person);
+                cout << endl;
+            }
+            catch (const exception& ex){
+                cerr << ex.what() << endl;
+            }
         }
         if (n == 1) { //Add person
             try {
-                cout << "You have chosen \"Add person\"." << endl << endl;
+                cout << "\"Add person\" menu." << endl << endl;
                 string fullName, country, phoneNumber;
                 int age;
                 cout << "Enter full name of person." << endl;
@@ -101,6 +81,10 @@ int main() {
                 getline(cin, fullName);
                 cout << "Enter age." << endl;
                 cin >> age;
+                while (age < 0 || age > 120) {
+                    cout << "Invalid age. Please enter an age between 0 and 120: ";
+                    cin >> age;
+                }
                 cout << "Enter country where person live." << endl;
                 cin >> ws;
                 getline(cin, country);
@@ -117,7 +101,7 @@ int main() {
         }
         if (n == 2){ //Add student
             try {
-                cout << "You have chosen \"Add student\"." << endl << endl;
+                cout << "\"Add student\" menu." << endl << endl;
                     string fullName, country, phoneNumber, university, faculty;
                 int age, course;
                 vector <int> grades;
@@ -126,6 +110,10 @@ int main() {
                 getline(cin, fullName);
                 cout << "Enter age." << endl;
                 cin >> age;
+                while (age < 16 || age > 120) {
+                    cout << "Invalid age. Please enter an age between 16 and 120: ";
+                    cin >> age;
+                }
                 cout << "Enter country where student live." << endl;
                 cin >> ws;
                 getline(cin, country);
@@ -150,9 +138,21 @@ int main() {
                 cout << "Enter all student`s grades for the exam." << endl;
                 for (int i = 0; i < amountOfGrades; i++){
                     int grade;
+                    cout << "Enter grade " << (i + 1) << ": ";
                     cin >> grade;
+                    // Проверка, чтобы оценка была в интервале от 0 до 100
+                    while (grade < 0 || grade > 100) {
+                        cout << "Invalid grade. Please enter a grade between 0 and 100: ";
+                        cin >> grade;
+                    }
                     grades.push_back(grade);
                 }
+                // Вывод введенных оценок для проверки
+                cout << "Entered grades: ";
+                for (int grade : grades) {
+                    cout << grade << " ";
+                }
+                cout << endl;
                 person = new Student(fullName, age, country, phoneNumber,
                                      university, faculty, course, grades);
                 people.addPerson(person);
@@ -164,7 +164,7 @@ int main() {
         }
         if (n == 3){ //Add teacher
             try {
-                cout << "You have chosen \"Add teacher\"." << endl << endl;
+                cout << "\"Add teacher\" menu." << endl << endl;
                 string fullName, country, phoneNumber, category;
                 int age, experience;
                 double salary;
@@ -173,13 +173,17 @@ int main() {
                 getline(cin, fullName);
                 cout << "Enter age." << endl;
                 cin >> age;
+                while (age < 23 || age > 120) {
+                    cout << "Invalid age. Please enter an age between 23 and 120: ";
+                    cin >> age;
+                }
                 cout << "Enter country where teacher live." << endl;
                 cin >> ws;
                 getline(cin, country);
                 cout << "Enter a phone number of teacher." << endl;
                 cin >> ws;
                 getline(cin, phoneNumber);
-                cout << "Enter teacher category." << endl;
+                cout << "Enter teacher category (First category teacher/Teacher of the highest category/None)." << endl;
                 cin >> ws;
                 getline(cin, category);
                 cout << "Enter teacher`s experience (number of years)." << endl;
@@ -196,7 +200,7 @@ int main() {
             }
         }
         if (n == 4){ //Edit person`s phone number
-            cout << "You have chosen \"Edit person`s phone number\"." << endl << endl;
+            cout << "\"Edit person`s phone number\" menu." << endl << endl;
             cout << "Choose person." << endl;
             people.printNameAndPhoneNumber();
             int p;
@@ -218,7 +222,7 @@ int main() {
             cout << endl;
         }
         if (n == 5){ //Check persons
-            cout << "You have chosen \"Check persons\"." << endl << endl;
+            cout << "\"Check persons\" menu." << endl << endl;
             cout << "Choose what you want to check. (enter number)" << endl;
             cout << "1. Is person adult." << endl;
             cout << "2. Is person from Ukraine." << endl;
@@ -302,7 +306,7 @@ int main() {
             }
         }
         if (n == 6){ //Delete person
-            cout << "You have chosen \"Delete person\"." << endl << endl;
+            cout << "\"Delete person\" menu." << endl << endl;
             cout << "There are your persons:" << endl;
             people.printPersons();
             cout << endl;
@@ -334,7 +338,7 @@ int main() {
             cout << endl;
         }
         if (n == 11){ //Print vacation pay for teacher
-            cout << "You have chosen \"Print vacation pay for teacher.\"." << endl << endl;
+            cout << "\"Print vacation pay for teacher\" menu." << endl << endl;
             cout << "Choose teacher." << endl;
             cout << "There are your teachers:" << endl;
             cout << endl;
@@ -366,7 +370,7 @@ int main() {
             cout << endl;
         }
         if (n == 12){ //Transfer a student to the next course.
-            cout << "You have chosen \"Transfer a student to the next course.\"." << endl << endl;
+            cout << "\"Transfer a student to the next course\" menu." << endl << endl;
             cout << "Choose student." << endl;
             cout << "There are your students:" << endl;
             cout << endl;
@@ -389,7 +393,7 @@ int main() {
             }
             cout << endl;
         }
-        cout << "Do you want to exit the program or continue working with the program?" << endl;
+        cout << "Do you want to leave the program or continue working?" << endl;
         cout << "1. Exit." << endl;
         cout << "2. Continue." << endl;
         int e;

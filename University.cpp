@@ -1,16 +1,16 @@
-#include "People.h"
+#include "University.h"
 
-People::~People() {
+University::~University() {
     for (auto person: m_persons){
         delete person;
     }
 }
 
-void People::addPerson(Person *person) {
+void University::addPerson(Person *person) {
     m_persons.push_back(person);
 }
 
-void People::deletePerson(Person *person) {
+void University::deletePerson(Person *person) {
     auto it = std::find(m_persons.begin(), m_persons.end(), person);
     if (it != m_persons.end()) {
         m_persons.erase(it);
@@ -18,11 +18,11 @@ void People::deletePerson(Person *person) {
     std::cout << "The person has been successfully deleted." << std::endl;
 }
 
-Person *People::getPerson(int pos) const {
+Person *University::getPerson(int pos) const {
     return m_persons[pos-1];
 }
 
-void People::printPersons() const {
+void University::printPersons() const {
     int i = 1;
     for (const auto& person : m_persons)
     {
@@ -31,7 +31,7 @@ void People::printPersons() const {
 }
 
 
-void People::printPersonsNames() const {
+void University::printPersonsNames() const {
     int i = 1;
     for (const auto& person : m_persons)
     {
@@ -39,11 +39,11 @@ void People::printPersonsNames() const {
     }
 }
 
-bool People::isNoPerson() const {
+bool University::isNoPerson() const {
     return  m_persons.empty();
 }
 
-bool People::isThereStudents() const {
+bool University::isThereStudents() const {
     int count = 0;
     for (const auto& person : m_persons){
         if (!person->isStudent()){
@@ -57,7 +57,7 @@ bool People::isThereStudents() const {
         return true;
 }
 
-bool People::isThereTeachers() const {
+bool University::isThereTeachers() const {
     int count = 0;
     for (const auto& person : m_persons){
         if (!person->isTeacher()){
@@ -71,7 +71,7 @@ bool People::isThereTeachers() const {
         return true;
 }
 
-void People::printAllStudentsWithScholarship() const {
+void University::printAllStudentsWithScholarship() const {
     int i = 1;
     for (const auto& person : m_persons){
         if (isThereStudents()) {
@@ -82,7 +82,7 @@ void People::printAllStudentsWithScholarship() const {
     }
 }
 
-void People::printNameAndPhoneNumber() const {
+void University::printNameAndPhoneNumber() const {
     int i = 1;
     for (const auto& person : m_persons){
         std::cout << i++ << ") " << std::setprecision(2) << person->getFullName() <<
@@ -90,7 +90,7 @@ void People::printNameAndPhoneNumber() const {
     }
 }
 
-void People::printTeachersSortedByExperience() const {
+void University::printTeachersSortedByExperience() const {
     std::vector<Teacher*> teachers;
 
     // Фильтрация учителей
@@ -112,7 +112,7 @@ void People::printTeachersSortedByExperience() const {
     }
 }
 
-void People::printTeacherWithMaxSalary() const {
+void University::printTeacherWithMaxSalary() const {
     std::vector<Teacher*> teachers;
     // Фильтрация учителей
     for (const auto& person : m_persons) {
@@ -131,7 +131,7 @@ void People::printTeacherWithMaxSalary() const {
     std::cout << "Teacher with maximum salary:\n" << (*maxSalaryTeacher)->info() << std::endl;
 }
 
-void People::printVacationPayForTeacher(int pos, int days) const {
+void University::printVacationPayForTeacher(int pos, int days) const {
     Person* teacher = getSelectedTeacher(pos);
     if (teacher) {
         double vacationPay = teacher->calculateVacationPay(days);
@@ -142,7 +142,7 @@ void People::printVacationPayForTeacher(int pos, int days) const {
     std::cout << "Teacher not found." << std::endl;
 }
 
-void People::printAllStudents() const {
+void University::printAllStudents() const {
     int i = 0;
     for (const auto& person : m_persons) {
         i = &person - &m_persons[0];
@@ -152,7 +152,7 @@ void People::printAllStudents() const {
     }
 }
 
-void People::printAllTeachers() const {
+void University::printAllTeachers() const {
     int i = 0;
     for (const auto& person : m_persons) {
         i = &person - &m_persons[0];
@@ -162,27 +162,19 @@ void People::printAllTeachers() const {
     }
 }
 
-/*int People::getStudentsNumber() const {
-    int i = 0;
-    for (const auto& person : m_persons){
-        if (person->isStudent())
-            i++;
-    }
-    return i;
-}*/
 
-Person* People::getSelectedStudent (int pos) const {
+Person* University::getSelectedStudent (int pos) const {
     for (int i = 1; i <= m_persons.size(); ){
-        if(i == pos){
+        if(i == pos && m_persons[i-1]->isStudent()){
             return m_persons[i-1];
         }
         i++;
     }
 }
 
-Person* People::getSelectedTeacher (int pos) const {
+Person* University::getSelectedTeacher (int pos) const {
     for (int i = 1; i <= m_persons.size(); ){
-        if(i == pos){
+        if(i == pos && m_persons[i-1]->isTeacher()){
             return m_persons[i-1];
         }
         i++;
